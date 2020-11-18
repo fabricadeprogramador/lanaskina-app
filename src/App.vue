@@ -1,60 +1,78 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
+  <v-app id="inspire">
+    <v-navigation-drawer
       dark
+      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+      v-model="drawer"
+      app
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in itensMenu"
+          :key="index"
+          link
+          :to="item.path"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icone }}</v-icon>
+          </v-list-item-icon>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.titulo }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-      <v-spacer></v-spacer>
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-title>Lanaskina App</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      drawer: null,
+      itensMenu: []
+    }
   },
 
-  data: () => ({
-    //
-  }),
-};
+  mounted() {
+    this.itensMenu = [
+      {
+        icone: 'mdi-home-outline',
+        titulo: 'Home',
+        path: '/home'
+      },
+      {
+        icone: 'mdi-account-edit-outline',
+        titulo: 'Perfil',
+        path: '/perfil'
+      },
+      {
+        icone: 'mdi-cart-outline',
+        titulo: 'Carrinho',
+        path: '/carrinho'
+      },
+      {
+        icone: 'mdi-history',
+        titulo: 'Histórico',
+        path: '/historico'
+      },
+      {
+        icone: 'mdi-logout',
+        titulo: 'Sair',
+        path: '/logout'
+      }
+    ]
+  }
+}
 </script>
