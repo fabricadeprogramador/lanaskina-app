@@ -20,7 +20,6 @@
 
               <v-list-item-content>
                 <v-card-title v-text="empresa.nome"></v-card-title>
-                <v-card-subtitle>{{ empresa.descricao }}</v-card-subtitle>
               </v-list-item-content>
             </v-list-item>
             <!-- </v-img> -->
@@ -48,7 +47,7 @@
 </template>
 
 <script>
-import HomeHttp from '@/HttpServices/HomeHttp'
+import EmpresaHttp from '@/HttpServices/EmpresaHttp'
 // @ is an alias to /src
 
 export default {
@@ -69,7 +68,7 @@ export default {
 
   methods: {
     async buscarEmpresas() {
-      let resposta = await HomeHttp.buscarTodos()
+      let resposta = await EmpresaHttp.buscarTodos()
       if (resposta && resposta.status == 200) {
         this.empresas = resposta.data
       }
@@ -77,10 +76,8 @@ export default {
 
     abrirDetalhesDaEmpresa(empresa) {
       this.$router.push({
-        path: '/detalhes-empresa',
-        params: { empresa: empresa }
+        path: `/detalhes-empresa/${empresa._id}`
       })
-      console.log(JSON.stringify(empresa))
     },
 
     getImagePath(image) {
