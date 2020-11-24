@@ -18,19 +18,15 @@
 
     <v-card class="mt-3">
       <v-row>
-        <v-col cols="5" class="ml-3">
-          <h3>Valor:</h3>
-        </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="4" class="ma-auto mr-3 text-center">
-          <h3>R$ {{ produto.valor.toFixed(2) }}</h3>
+        <v-col cols="12" class="ml-3 px-0 pl-3">
+          <h3>Valor: R$ {{ produto.valor.toFixed(2) }}</h3>
         </v-col>
       </v-row>
     </v-card>
 
     <v-card class="mt-3">
       <v-row>
-        <v-col cols="4" class="my-auto ml-3">
+        <v-col cols="4" class="my-auto ml-3 pr-0">
           <h3>Quantidade:</h3>
         </v-col>
         <v-col cols="3">
