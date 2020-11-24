@@ -37,7 +37,7 @@
 
     <v-row>
       <v-col cols="12" class="text-center">
-        <v-btn depressed color="primary">
+        <v-btn depressed color="primary" @click="adicionarCarrinho(produto)">
           Adicionar
         </v-btn>
       </v-col>
@@ -46,31 +46,40 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
+import EmpresaHttp from "@/HttpServices/EmpresaHttp";
 
 export default {
-  name: 'Detalhes-Empresa',
+  name: "Detalhes-Empresa",
   data() {
     return {
       produto: {},
       qtd: 0
-    }
+    };
   },
   created() {
-    this.getProdutoNaEmpresa()
+    this.getProdutoNaEmpresa();
   },
   methods: {
     async getProdutoNaEmpresa() {
-      let empresaId = this.$route.params.empresa_id
+      let empresaId = this.$route.params.empresa_id;
 
-      let resposta = await EmpresaHttp.buscarPorId(empresaId)
+      let resposta = await EmpresaHttp.buscarPorId(empresaId);
       if (resposta && resposta.status == 200) {
-        resposta.data.produtos.forEach((produto) => {
+        resposta.data.produtos.forEach(produto => {
           if (produto._id == this.$route.params.produto_id)
-            this.produto = produto
-        })
+            this.produto = produto;
+        });
+      }
+    },
+    adicionarCarrinho(produto) {
+      if (this.qtd > 0) {
+        this.$router.push({
+          path: `/carrinho/${produto._id}`
+        });
+      }else{
+        alert("Informe a quantidade!")
       }
     }
   }
-}
+};
 </script>
