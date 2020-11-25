@@ -13,37 +13,22 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
+    component: () => import('../views/Home.vue')
   },
   {
     path: '/detalhes-empresa/:empresa_id',
     name: 'Detalhes Empresa',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/DetalhesEmpresa.vue')
+    component: () => import('../views/DetalhesEmpresa.vue')
   },
   {
     path: '/detalhes-produto/:empresa_id/:produto_id',
     name: 'Detalhes Produto',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/DetalhesProduto.vue')
+    component: () => import('../views/DetalhesProduto.vue')
   },
   {
-    path: '/carrinho/:produto_id',
-    name: 'Carrinho Produto',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Carrinho.vue')
+    path: '/carrinho',
+    name: 'Carrinho',
+    component: () => import('../views/Carrinho.vue')
   }
 ]
 

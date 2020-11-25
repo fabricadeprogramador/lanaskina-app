@@ -46,40 +46,58 @@
 </template>
 
 <script>
-import EmpresaHttp from "@/HttpServices/EmpresaHttp";
+import EmpresaHttp from '@/HttpServices/EmpresaHttp'
+import ClienteHttp from '@/HttpServices/ClienteHttp'
 
 export default {
-  name: "Detalhes-Empresa",
+  name: 'Detalhes-Empresa',
   data() {
     return {
       produto: {},
-      qtd: 0
-    };
+      qtd: 0,
+      empresa: '',
+      cliente: '5f98be432e9ed602a0dfdb4c'
+    }
   },
   created() {
-    this.getProdutoNaEmpresa();
+    this.getProdutoNaEmpresa()
   },
   methods: {
     async getProdutoNaEmpresa() {
-      let empresaId = this.$route.params.empresa_id;
+      this.empresa = this.$route.params.empresa_id
 
-      let resposta = await EmpresaHttp.buscarPorId(empresaId);
+      let resposta = await EmpresaHttp.buscarPorId(this.empresa)
       if (resposta && resposta.status == 200) {
-        resposta.data.produtos.forEach(produto => {
+        resposta.data.produtos.forEach((produto) => {
           if (produto._id == this.$route.params.produto_id)
-            this.produto = produto;
-        });
+            this.produto = produto
+        })
       }
     },
-    adicionarCarrinho(produto) {
+
+    async adicionarCarrinho(produto) {
       if (this.qtd > 0) {
-        this.$router.push({
-          path: `/carrinho/${produto._id}`
-        });
-      }else{
-        alert("Informe a quantidade!")
+        let produtoEnvio = {}
+        produtoEnvio.empresa = this.empresa
+        produtoEnvio.produto = produto._id
+        produtoEnvio.quantidade = Number(this.qtd)
+
+        console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
+
+        let resposta = await ClienteHttp.adicionarAoCarrinho(
+          this.cliente,
+          produtoEnvio
+        )
+
+        console.log('RESPOSTA: ' + JSON.stringify(resposta))
+        if (resposta && resposta.status == 200)
+          this.$router.push({
+            path: `/carrinho`
+          })
+      } else {
+        alert('Informe a quantidade!')
       }
     }
   }
-};
+}
 </script>

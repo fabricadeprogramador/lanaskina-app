@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
+// import EmpresaHttp from '@/HttpServices/EmpresaHttp'
 
 export default {
   name: 'Carrinho Produto',
@@ -36,17 +36,16 @@ export default {
     }
   },
   created() {
-    this.getProduto()
+    // this.getProduto()
   },
   methods: {
     async getProduto() {
-      let empresaId = this.$route.params.empresa_id
-
-      let resposta = await EmpresaHttp.buscarPorId(empresaId)
-      if (resposta && resposta.status == 200) {
-        this.empresa = resposta.data
-      }
-    },
+      // let empresaId = this.$route.params.empresa_id
+      // let resposta = await EmpresaHttp.buscarPorId(empresaId)
+      // if (resposta && resposta.status == 200) {
+      //   this.empresa = resposta.data
+      // }
+    }
   }
 }
 </script>

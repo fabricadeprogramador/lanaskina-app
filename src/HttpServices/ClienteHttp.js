@@ -1,14 +1,17 @@
 const axios = require('axios')
 
-const API_HOST = 'http://localhost:3000/empresas'
+const API_HOST = 'http://localhost:3000/clientes'
 
 export default {
   async buscarTodos() {
     return axios.get(API_HOST).then((resposta) => resposta)
   },
 
-  async buscarPorId(id) {
-    return axios.get(`${API_HOST}/${id}`).then((resposta) => resposta)
+  async adicionarAoCarrinho(clienteId, produto) {
+    return await axios.post(
+      `${API_HOST}/adicionar-ao-carrinho/${clienteId}`,
+      produto
+    )
   }
 
   //   async adicionar(convidado) {
