@@ -12,7 +12,11 @@ export default {
       `${API_HOST}/adicionar-ao-carrinho/${clienteId}`,
       produto
     )
-  }
+  },
+
+  async adicionar(cliente)    {
+    return axios.post(API_HOST, cliente).then((resposta)=> resposta)
+},
 
   //   async adicionar(convidado) {
   //     return axios.post(API_HOST, convidado).then((resposta) => resposta)
