@@ -29,6 +29,11 @@ const routes = [
     path: '/carrinho',
     name: 'Carrinho',
     component: () => import('../views/Carrinho.vue')
+  },
+  {
+    path: '/finalizar-compra',
+    name: 'Finalizar',
+    component: () => import('../views/FinalizarCompra.vue')
   }
 ]
 

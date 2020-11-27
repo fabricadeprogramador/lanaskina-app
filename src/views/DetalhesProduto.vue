@@ -37,7 +37,7 @@
 
     <v-row>
       <v-col cols="12" class="text-center">
-        <v-btn depressed color="primary" @click="adicionarCarrinho(produto)">
+        <v-btn rounded depressed color="primary" @click="adicionarCarrinho(produto)">
           Adicionar
         </v-btn>
       </v-col>
@@ -53,7 +53,9 @@ export default {
   name: 'Detalhes-Empresa',
   data() {
     return {
-      produto: {},
+      produto: {
+        valor:0
+      },
       qtd: 0,
       empresa: '',
       cliente: '5f98be432e9ed602a0dfdb4c'
@@ -82,14 +84,14 @@ export default {
         produtoEnvio.produto = produto._id
         produtoEnvio.quantidade = Number(this.qtd)
 
-        console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
+        //console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
 
-        let resposta = await ClienteHttp.adicionarAoCarrinho(
+        let resposta = await ClienteHttp.teste(
           this.cliente,
           produtoEnvio
         )
 
-        console.log('RESPOSTA: ' + JSON.stringify(resposta))
+        //console.log('RESPOSTA: ' + JSON.stringify(resposta))
         if (resposta && resposta.status == 200)
           this.$router.push({
             path: `/carrinho`
