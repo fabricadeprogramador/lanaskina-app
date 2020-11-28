@@ -1,6 +1,16 @@
 <template>
   <v-container>
     <v-card class="pa-3">
+      <!-- //Inicio mensagem de sucesso -->
+      <v-dialog v-model="dialogMsg" max-width="400">
+        <v-expand-transition>
+          <v-alert :type="typeMsg" class="text-center">
+            <strong> {{ msg }}</strong>
+          </v-alert>
+        </v-expand-transition>
+      </v-dialog>
+      <!-- Final de mensagem de sucesso -->
+
       <div class="d-flex flex-column justify-space-between align-center my-3">
         <v-img width="300" :src="produto.imagem"></v-img>
       </div>
@@ -37,7 +47,12 @@
 
     <v-row>
       <v-col cols="12" class="text-center">
-        <v-btn rounded depressed color="primary" @click="adicionarCarrinho(produto)">
+        <v-btn
+          rounded
+          depressed
+          color="primary"
+          @click="adicionarCarrinho(produto)"
+        >
           Adicionar
         </v-btn>
       </v-col>
@@ -46,60 +61,79 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
-import ClienteHttp from '@/HttpServices/ClienteHttp'
+import EmpresaHttp from "@/HttpServices/EmpresaHttp";
+import ClienteHttp from "@/HttpServices/ClienteHttp";
 
 export default {
-  name: 'Detalhes-Empresa',
+  name: "Detalhes-Empresa",
   data() {
     return {
       produto: {
-        valor:0
+        valor: 0
       },
       qtd: 0,
-      empresa: '',
-      cliente: '5f98be432e9ed602a0dfdb4c'
-    }
+      empresa: "",
+      cliente: "5f98be432e9ed602a0dfdb4c",
+      dialogMsg: false,
+      msg: "",
+      typeMsg: "success"
+    };
   },
   created() {
-    this.getProdutoNaEmpresa()
+    this.getProdutoNaEmpresa();
   },
   methods: {
     async getProdutoNaEmpresa() {
-      this.empresa = this.$route.params.empresa_id
+      this.empresa = this.$route.params.empresa_id;
 
-      let resposta = await EmpresaHttp.buscarPorId(this.empresa)
+      let resposta = await EmpresaHttp.buscarPorId(this.empresa);
       if (resposta && resposta.status == 200) {
-        resposta.data.produtos.forEach((produto) => {
+        resposta.data.produtos.forEach(produto => {
           if (produto._id == this.$route.params.produto_id)
-            this.produto = produto
-        })
+            this.produto = produto;
+        });
       }
     },
 
     async adicionarCarrinho(produto) {
       if (this.qtd > 0) {
-        let produtoEnvio = {}
-        produtoEnvio.empresa = this.empresa
-        produtoEnvio.produto = produto._id
-        produtoEnvio.quantidade = Number(this.qtd)
+        let produtoEnvio = {};
+        produtoEnvio.empresa = this.empresa;
+        produtoEnvio.produto = produto._id;
+        produtoEnvio.quantidade = Number(this.qtd);
 
         //console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
 
-        let resposta = await ClienteHttp.teste(
-          this.cliente,
-          produtoEnvio
-        )
+        let resposta = await ClienteHttp.teste(this.cliente, produtoEnvio);
 
-        //console.log('RESPOSTA: ' + JSON.stringify(resposta))
-        if (resposta && resposta.status == 200)
-          this.$router.push({
-            path: `/carrinho`
-          })
+        if (resposta && resposta.status == 200) {
+          this.dialogMsg = true;
+          this.msg = "Produto adicionado ao carrinho";
+
+          setTimeout(() => {
+            (this.dialogMsg = false), (this.msg = "");
+
+            this.$router.push({
+              path: `/carrinho`
+            });
+          }, 1500);
+        } else if ( resposta.status == 202) {
+         
+          this.dialogMsg = true;
+          this.msg =
+            "Não é possivel fazer compra em outra loja. Finaliza a compra ou que está em seu carrinho!";
+          this.typeMsg = "warning";
+
+          setTimeout(() => {
+            this.dialogMsg = false;
+            this.msg ="";
+            this.typeMsg = "success";
+          }, 3500);
+        }
       } else {
-        alert('Informe a quantidade!')
+        alert("Informe a quantidade!");
       }
     }
   }
-}
+};
 </script>

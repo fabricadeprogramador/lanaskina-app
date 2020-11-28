@@ -10,17 +10,10 @@ export default {
 
   async buscarPorId(id) {
     return axios.get(`${API_HOST}/${id}`).then((resposta) => resposta)
+  },
+
+  async criaTransacoes(idEmpresa, transacao){
+    return axios.post(`${API_HOST}/transacoes/${idEmpresa}`,transacao ).then((resposta) => resposta)
   }
-
-  //   async adicionar(convidado) {
-  //     return axios.post(API_HOST, convidado).then((resposta) => resposta)
-  //   },
-
-  //   async deletar(id) {
-  //     return axios.delete(`${API_HOST}/${id}`).then((resposta) => resposta)
-  //   },
-
-  //   async editar(convidado) {
-  //     return axios.put(API_HOST, convidado).then((resposta) => resposta)
-  //   }
+ 
 }
