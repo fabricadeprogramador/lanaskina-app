@@ -1,7 +1,7 @@
 const axios = require('axios')
 
-//const API_HOST = 'https://t29-lanaskina-api.herokuapp.com/clientes'
-const API_HOST = 'http://localhost:3000/clientes'
+const API_HOST = 'https://t29-lanaskina-api.herokuapp.com/clientes'
+//const API_HOST = 'http://localhost:3000/clientes'
 
 export default {
   async buscarTodos() {
