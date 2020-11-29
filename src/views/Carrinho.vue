@@ -40,7 +40,7 @@
           R$ {{ item.valor.toFixed(2) }}
         </template>
         <template v-slot:item.acao="{ item }">
-          <v-icon @click="abreTelaConfirmarExclusao(item)  ">
+          <v-icon @click="abreTelaConfirmarExclusao(item)" title="Exclui Produto">
             mdi mdi-minus-circle-outline
           </v-icon>
         </template>

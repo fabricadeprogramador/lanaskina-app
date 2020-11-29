@@ -8,7 +8,7 @@ export default {
     return axios.get(API_HOST).then((resposta) => resposta)
   },
 
-  async teste(clienteId, produto) {
+  async adicionarAoCarrinho(clienteId, produto) {
     return await axios.post(
       `${API_HOST}/adicionar-ao-carrinho/${clienteId}`,
       produto

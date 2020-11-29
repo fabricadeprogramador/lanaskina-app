@@ -4,12 +4,46 @@
       <!-- //Inicio mensagem de sucesso -->
       <v-dialog v-model="dialogMsg" max-width="400">
         <v-expand-transition>
-          <v-alert :type="typeMsg" class="text-center">
+          <v-alert type="success" class="text-center">
             <strong> {{ msg }}</strong>
           </v-alert>
         </v-expand-transition>
       </v-dialog>
       <!-- Final de mensagem de sucesso -->
+
+      <!-- Inicio alerta que não pode comprar em outra empresa com produtos no carrino -->
+      <v-expand-transition>
+        <v-row justify="center">
+          <v-alert
+            v-model="empresaEdiferente"
+            class="text-center"
+            :value="empresaEdiferente"
+            type="warning"
+            max-width="450"
+          >
+            <v-row
+              ><strong>{{ msg }}</strong></v-row
+            >
+            <small>É possivel adicionar produtos ao carrinho da mesma loja!</small>
+            <div class="mt-5 text-center">
+              <v-row justify="center">
+                <v-alert color="black">Deseja Ir para o carrinho?</v-alert>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn @click="irParaCarrinho" color="success">Sim</v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="empresaEdiferente = false" color="info"
+                    >Nao</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </div>
+          </v-alert>
+        </v-row>
+      </v-expand-transition>
+      <!-- Final alerta que não pode comprar em outra empresa com produtos no carrino -->
 
       <div class="d-flex flex-column justify-space-between align-center my-3">
         <v-img width="300" :src="produto.imagem"></v-img>
@@ -76,7 +110,8 @@ export default {
       cliente: "5f98be432e9ed602a0dfdb4c",
       dialogMsg: false,
       msg: "",
-      typeMsg: "success"
+      iconeFechaAlertEmpresaDiferente: true,
+      empresaEdiferente: false
     };
   },
   created() {
@@ -104,8 +139,11 @@ export default {
 
         //console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
 
-        let resposta = await ClienteHttp.teste(this.cliente, produtoEnvio);
-
+        let resposta = await ClienteHttp.adicionarAoCarrinho(
+          this.cliente,
+          produtoEnvio
+        );
+        console.log(resposta);
         if (resposta && resposta.status == 200) {
           this.dialogMsg = true;
           this.msg = "Produto adicionado ao carrinho";
@@ -117,22 +155,25 @@ export default {
               path: `/carrinho`
             });
           }, 1500);
-        } else if ( resposta.status == 202) {
-         
-          this.dialogMsg = true;
+        } else if (resposta.status == 202) {
+          this.empresaEdiferente = true;
           this.msg =
-            "Não é possivel fazer compra em outra loja. Finaliza a compra ou que está em seu carrinho!";
-          this.typeMsg = "warning";
+            "Não é possivel fazer compras em outra loja antes de finalizar o carrinho!";
 
-          setTimeout(() => {
-            this.dialogMsg = false;
-            this.msg ="";
-            this.typeMsg = "success";
-          }, 3500);
+          // setTimeout(() => {
+          //   this.empresaEdiferente = false;
+          //   this.msg = "";
+          //   this.typeMsg = "success";
+          // }, 3500);
         }
       } else {
         alert("Informe a quantidade!");
       }
+    },
+    irParaCarrinho() {
+      this.$router.push({
+        path: `/carrinho`
+      });
     }
   }
 };
