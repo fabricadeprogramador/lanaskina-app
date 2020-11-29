@@ -7,6 +7,9 @@ export default {
   async buscarTodos() {
     return axios.get(API_HOST).then((resposta) => resposta)
   },
+  async buscarHistorico(clienteId) {
+    return axios.get(`${API_HOST}/historico/${clienteId}`).then((resposta) => resposta)
+  },
 
   async adicionarAoCarrinho(clienteId, produto) {
     return await axios.post(

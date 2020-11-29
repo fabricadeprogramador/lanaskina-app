@@ -152,7 +152,7 @@ export default {
             (this.dialogMsg = false), (this.msg = "");
 
             this.$router.push({
-              path: `/carrinho`
+              path: `/carrinho/${this.cliente}`
             });
           }, 1500);
         } else if (resposta.status == 202) {

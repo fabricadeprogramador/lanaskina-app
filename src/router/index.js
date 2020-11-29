@@ -36,7 +36,7 @@ const routes = [
     component: () => import('../views/FinalizarCompra.vue')
   },
   {
-    path: '/historico/:cliente_id',
+    path: '/historico',
     name: 'Historico',
     component: () => import('../views/Historico.vue')
   }
