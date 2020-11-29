@@ -22,5 +22,8 @@ export default {
   },
   async excluirProdutoCarrinho(idCliente, produto){
     return axios.put(`${API_HOST}-carrinho/${idCliente}`,produto).then((resposta) =>resposta)
-  }
+  },
+  async adicionar(cliente)    {
+    return axios.post(API_HOST, cliente).then((resposta)=> resposta)
+},
 }
