@@ -72,11 +72,7 @@
 import ClienteHttp from "@/HttpServices/ClienteHttp";
 
 export default {
-<<<<<<< HEAD
-  name: 'Carrinho',
-=======
   name: "Carrinho",
->>>>>>> 0331b5aa4496bd5f12a0370dbe8ed85dd39a12fb
   data() {
     return {
       produto: {},
