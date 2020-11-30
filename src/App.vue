@@ -71,6 +71,11 @@ export default {
         icone: 'mdi-logout',
         titulo: 'Sair',
         path: '/logout'
+      },
+      {
+        icone: 'mdi-account-edit-outline',
+        titulo: 'Cadastro',
+        path: '/cadastro'
       }
     ]
   }

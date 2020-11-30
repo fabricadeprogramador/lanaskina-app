@@ -29,7 +29,7 @@
 // import EmpresaHttp from '@/HttpServices/EmpresaHttp'
 
 export default {
-  name: 'Carrinho Produto',
+  name: 'Carrinho',
   data() {
     return {
       produto: {}

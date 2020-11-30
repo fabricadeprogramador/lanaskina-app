@@ -1,12 +1,19 @@
 <template>
   <div>
     <h3>Você está a um passo de economizar e comer MUUUITO! </h3>
-     <v-form>
-       <v-container>
+     <v-form class="mr-3">
+       <v-container class="px-5">
          <v-text-field 
           v-model="cadastroCorrente.nome"
           :rules="nomeRules"
           label="Nome Completo"
+          required >
+          </v-text-field>
+
+          <v-text-field 
+          v-model="cadastroCorrente.cpf"
+          :rules="cpfRules"
+          label="CPF"
           required >
           </v-text-field>
 
@@ -58,6 +65,7 @@
 
           <v-text-field 
           v-model="cadastroCorrente.rua"
+          :rules="ruaRules"
           label="Rua."
           required >
           </v-text-field>
@@ -69,25 +77,24 @@
           </v-text-field>
           <v-text-field 
           v-model="cadastroCorrente.complemento"
-          
           label="Complemento"
-          required >
+          >
           </v-text-field>
           <v-text-field 
           v-model="cadastroCorrente.bairro"
-          
+          :rules="bairroRules"
           label="Bairro"
           required >
           </v-text-field>
           <v-text-field 
           v-model="cadastroCorrente.cidade"
-          
+          :rules="cidadeRules"
           label="Cidade"
           required >
           </v-text-field>
           <v-text-field 
           v-model="cadastroCorrente.uf"
-          
+          :rules="ufRules"
           label="Estado"
           required >
           </v-text-field>
@@ -108,14 +115,16 @@
 <script>
 import ClienteHttp from "@/HttpServices/ClienteHttp";
 
+
 export default {
-  
+  name: 'Cadastro',
   data: () => ({
 
     confirmarSenha: "",
-    usuarios: [],
+    clienteCorrente: [],
     cadastroCorrente: {
       nome: "",
+      cpf: "",
       username: "",
       senha: "",
       telefone: "",
@@ -138,6 +147,12 @@ export default {
       v =>
         (v.length >= 10 && v.length <= 30) ||
         "Nome precisa ter entre 10 e 30 caracteres"
+    ],
+    cpfRules: [
+      v => !!v || "CPF é obrigatório",
+      v =>
+        (v.length ==11) ||
+        "Digite somente os números do CPF"
     ],
     usernameRules: [
       v => !!v || "Username é obrigatório",
@@ -175,30 +190,62 @@ export default {
         (v.length >= 1 && v.length <= 5) ||
         "Número precisa ter entre 1 e 5 caracteres"
     ],
+    ruaRules: [
+      v => !!v || "Rua é obrigatório",
+      v =>
+        (v.length >= 5) ||
+        "Digite sua rua, avenida, travessa, etc"
+    ],
+    bairroRules: [
+      v => !!v || "bairro é obrigatório",
+      v =>
+        (v.length >= 3) ||
+        "Vila, Jardim, etc"
+    ],
+    cidadeRules: [
+      v => !!v || "Cidade é obrigatório",
+      v =>
+        (v.length >= 1 && v.length <= 12) ||
+        "Cidade, Distrito, etc"
+    ],
+    ufRules: [
+      v => !!v || "Estado é obrigatório",
+      v =>
+        (v.length ==2) ||
+        "SIGLA ex: MS "
+    ],
 
    
   }),
 
   methods: {
 
-    async salvar() {
-      if (this.cadastroCorrente.senha != this.confirmarSenha) {
-        alert("Senhas não conferem!");
-      }
+     async salvar(){
+       if (this.cadastroCorrente.senha != this.confirmarSenha) {
+         alert("Senhas não conferem!");
+       }
 
-      let resposta = await ClienteHttp.adicionar(this.cadastroCorrente);
-      if (resposta.status === 200) {
-        this.fechaCadastroUsuario();
-        
+       let resposta = await ClienteHttp.adicionar(this.clienteCorrente);
+       if (resposta.status === 200) {
+         this.fechaCadastroUsuario();
+         this.buscarTodos();
 
-      }
-    },
-    adicionar() {
-      this.cadastroCorrente.id = this.geradorId;
-      this.geradorId++;
-      this.usuarios.push(this.cadastroCorrente);
-    },
+         this.isDialogSalvoComSucesso = true;
+         this.msgSalvoComSucesso = "Cliente criado com sucesso";
+
+         setTimeout(() => {
+           this.isDialogSalvoComSucesso = false;
+           this.msgSalvoComSucesso = "";
+         }, 1500);
+       }
+     },
+     adicionar() {
+       // this.clienteCorrente.id = this.geradorId;
+       this.geradorId++;
+       this.clienteCorrente.push(this.cadastroCorrente);
+     },
     
+
   
   },
 };
