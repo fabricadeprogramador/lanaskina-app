@@ -1,6 +1,50 @@
 <template>
   <v-container>
     <v-card class="pa-3">
+      <!-- //Inicio mensagem de sucesso -->
+      <v-dialog v-model="dialogMsg" max-width="400">
+        <v-expand-transition>
+          <v-alert type="success" class="text-center">
+            <strong> {{ msg }}</strong>
+          </v-alert>
+        </v-expand-transition>
+      </v-dialog>
+      <!-- Final de mensagem de sucesso -->
+
+      <!-- Inicio alerta que não pode comprar em outra empresa com produtos no carrino -->
+      <v-expand-transition>
+        <v-row justify="center">
+          <v-alert
+            v-model="empresaEdiferente"
+            class="text-center"
+            :value="empresaEdiferente"
+            type="warning"
+            max-width="450"
+          >
+            <v-row
+              ><strong>{{ msg }}</strong></v-row
+            >
+            <small>É possivel adicionar produtos ao carrinho da mesma loja!</small>
+            <div class="mt-5 text-center">
+              <v-row justify="center">
+                <v-alert color="black">Deseja Ir para o carrinho?</v-alert>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn @click="irParaCarrinho" color="success">Sim</v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="empresaEdiferente = false" color="info"
+                    >Nao</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </div>
+          </v-alert>
+        </v-row>
+      </v-expand-transition>
+      <!-- Final alerta que não pode comprar em outra empresa com produtos no carrino -->
+
       <div class="d-flex flex-column justify-space-between align-center my-3">
         <v-img width="300" :src="produto.imagem"></v-img>
       </div>
@@ -37,7 +81,12 @@
 
     <v-row>
       <v-col cols="12" class="text-center">
-        <v-btn depressed color="primary" @click="adicionarCarrinho(produto)">
+        <v-btn
+          rounded
+          depressed
+          color="primary"
+          @click="adicionarCarrinho(produto)"
+        >
           Adicionar
         </v-btn>
       </v-col>
@@ -46,58 +95,86 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
-import ClienteHttp from '@/HttpServices/ClienteHttp'
+import EmpresaHttp from "@/HttpServices/EmpresaHttp";
+import ClienteHttp from "@/HttpServices/ClienteHttp";
 
 export default {
-  name: 'Detalhes-Empresa',
+  name: "Detalhes-Empresa",
   data() {
     return {
-      produto: {},
+      produto: {
+        valor: 0
+      },
       qtd: 0,
-      empresa: '',
-      cliente: '5f98be432e9ed602a0dfdb4c'
-    }
+      empresa: "",
+      cliente: "5f98be432e9ed602a0dfdb4c",
+      dialogMsg: false,
+      msg: "",
+      iconeFechaAlertEmpresaDiferente: true,
+      empresaEdiferente: false
+    };
   },
   created() {
-    this.getProdutoNaEmpresa()
+    this.getProdutoNaEmpresa();
   },
   methods: {
     async getProdutoNaEmpresa() {
-      this.empresa = this.$route.params.empresa_id
+      this.empresa = this.$route.params.empresa_id;
 
-      let resposta = await EmpresaHttp.buscarPorId(this.empresa)
+      let resposta = await EmpresaHttp.buscarPorId(this.empresa);
       if (resposta && resposta.status == 200) {
-        resposta.data.produtos.forEach((produto) => {
+        resposta.data.produtos.forEach(produto => {
           if (produto._id == this.$route.params.produto_id)
-            this.produto = produto
-        })
+            this.produto = produto;
+        });
       }
     },
 
     async adicionarCarrinho(produto) {
       if (this.qtd > 0) {
-        let produtoEnvio = {}
-        produtoEnvio.empresa = this.empresa
-        produtoEnvio.produto = produto._id
-        produtoEnvio.quantidade = Number(this.qtd)
+        let produtoEnvio = {};
+        produtoEnvio.empresa = this.empresa;
+        produtoEnvio.produto = produto._id;
+        produtoEnvio.quantidade = Number(this.qtd);
 
-        console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
+        //console.log('PRODUTO ENVIO: ' + JSON.stringify(produtoEnvio))
 
         let resposta = await ClienteHttp.adicionarAoCarrinho(
           this.cliente,
           produtoEnvio
-        )
+        );
+        console.log(resposta);
+        if (resposta && resposta.status == 200) {
+          this.dialogMsg = true;
+          this.msg = "Produto adicionado ao carrinho";
 
-        console.log('RESPOSTA: ' + JSON.stringify(resposta))
-        if (resposta && resposta.status == 200)
-          this.$router.push({
-            path: `/carrinho`
-          })
+          setTimeout(() => {
+            (this.dialogMsg = false), (this.msg = "");
+
+            this.$router.push({
+              path: `/carrinho/${this.cliente}`
+            });
+          }, 1500);
+        } else if (resposta.status == 202) {
+          this.empresaEdiferente = true;
+          this.msg =
+            "Não é possivel fazer compras em outra loja antes de finalizar o carrinho!";
+
+          // setTimeout(() => {
+          //   this.empresaEdiferente = false;
+          //   this.msg = "";
+          //   this.typeMsg = "success";
+          // }, 3500);
+        }
       } else {
-        alert('Informe a quantidade!')
+        alert("Informe a quantidade!");
       }
+    },
+    irParaCarrinho() {
+      this.$router.push({
+        path: `/carrinho`
+      });
     }
   }
-}
+};
 </script>

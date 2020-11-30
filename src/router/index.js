@@ -31,6 +31,16 @@ const routes = [
     component: () => import('../views/Carrinho.vue')
   },
   {
+    path: '/finalizar-compra/:cliente_id',
+    name: 'Finalizar',
+    component: () => import('../views/FinalizarCompra.vue')
+  },
+  {
+    path: '/historico',
+    name: 'Historico',
+    component: () => import('../views/Historico.vue')
+  },
+  {
     path: '/cadastro',
     name: 'Cadastro',
 

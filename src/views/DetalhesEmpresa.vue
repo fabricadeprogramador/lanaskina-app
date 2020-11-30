@@ -55,7 +55,13 @@ export default {
   name: 'Detalhes-Empresa',
   data() {
     return {
-      empresa: {}
+      empresa: {
+        endereco:{
+          rua:'',
+          bairro:'',
+          numero:''
+        }
+      }
     }
   },
   created() {
