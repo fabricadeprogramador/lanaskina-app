@@ -1,6 +1,7 @@
 import Axios from '@/services/AxiosInstance';
 
-const API_HOST = 'http://localhost:3000/clientes';
+// const API_HOST = 'http://localhost:3000/clientes';
+const API_HOST = 'https://t29-lanaskina-api.herokuapp.com/clientes';
 
 export default {
   async buscarTodos() {
