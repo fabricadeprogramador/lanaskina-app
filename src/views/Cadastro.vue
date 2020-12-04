@@ -1,114 +1,118 @@
 <template>
   <div>
-    <h3>Você está a um passo de economizar e comer MUUUITO! </h3>
-     <v-form class="mr-3">
-       <v-container class="px-5">
-         <v-text-field 
+    <h3>Você está a um passo de economizar e comer MUUUITO!</h3>
+    <v-form class="mr-3">
+      <v-container class="px-5">
+        <v-text-field
           v-model="cadastroCorrente.nome"
           :rules="nomeRules"
           label="Nome Completo"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.cpf"
           :rules="cpfRules"
           label="CPF"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.username"
           :rules="usernameRules"
           label="Nome de Usuário"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.senha"
           :rules="senhaRules"
           label="senha"
           type="password"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="confirmarSenha"
           :rules="senhaRules"
           label="Confirmar Senha"
           type="password"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.telefone"
           :rules="telefoneRules"
           label="Celular"
           type="number"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.email"
           :rules="emailRules"
           label="E-mail"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.cep"
           :rules="cepRules"
           label="CEP"
-          required >
-          </v-text-field>
+          required
+        >
+        </v-text-field>
 
-          <v-text-field 
+        <v-text-field
           v-model="cadastroCorrente.rua"
           :rules="ruaRules"
           label="Rua."
-          required >
-          </v-text-field>
-          <v-text-field 
+          required
+        >
+        </v-text-field>
+        <v-text-field
           v-model="cadastroCorrente.numero"
           :rules="numeroRules"
           label="Número"
-          required >
-          </v-text-field>
-          <v-text-field 
+          required
+        >
+        </v-text-field>
+        <v-text-field
           v-model="cadastroCorrente.complemento"
           label="Complemento"
-          >
-          </v-text-field>
-          <v-text-field 
+        >
+        </v-text-field>
+        <v-text-field
           v-model="cadastroCorrente.bairro"
           :rules="bairroRules"
           label="Bairro"
-          required >
-          </v-text-field>
-          <v-text-field 
+          required
+        >
+        </v-text-field>
+        <v-text-field
           v-model="cadastroCorrente.cidade"
           :rules="cidadeRules"
           label="Cidade"
-          required >
-          </v-text-field>
-          <v-text-field 
+          required
+        >
+        </v-text-field>
+        <v-text-field
           v-model="cadastroCorrente.uf"
           :rules="ufRules"
           label="Estado"
-          required >
-          </v-text-field>
-          <v-btn
-              color="success"
-              class="mr-4"
-              @click="salvar"
-            >
-              Salvar
-            </v-btn>
-          
-
-       </v-container>
-     </v-form>
+          required
+        >
+        </v-text-field>
+        <v-btn color="success" class="mr-4" @click="salvar"> Salvar </v-btn>
+      </v-container>
+    </v-form>
   </div>
 </template>
 
@@ -121,7 +125,6 @@ export default {
   data: () => ({
 
     confirmarSenha: "",
-    clienteCorrente: [],
     cadastroCorrente: {
       nome: "",
       cpf: "",
@@ -225,10 +228,7 @@ export default {
          alert("Senhas não conferem!");
        }
 
-       let resposta = await ClienteHttp.adicionar(this.clienteCorrente);
-       if (resposta.status === 200) {
-         this.fechaCadastroUsuario();
-         this.buscarTodos();
+       
 
          this.isDialogSalvoComSucesso = true;
          this.msgSalvoComSucesso = "Cliente criado com sucesso";
@@ -240,9 +240,16 @@ export default {
        }
      },
      adicionar() {
-       // this.clienteCorrente.id = this.geradorId;
-       this.geradorId++;
-       this.clienteCorrente.push(this.cadastroCorrente);
+       
+       
+       
+     },
+     
+     fechaCadastroUsuario(){
+       this.$router.push({
+        path: `/`
+      });
+
      },
     
 
