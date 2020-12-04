@@ -117,144 +117,108 @@
 </template>
 
 <script>
-import ClienteHttp from "@/HttpServices/ClienteHttp";
-
-
 export default {
   name: 'Cadastro',
   data: () => ({
-
-    confirmarSenha: "",
+    confirmarSenha: '',
     cadastroCorrente: {
-      nome: "",
-      cpf: "",
-      username: "",
-      senha: "",
-      telefone: "",
-      email: "",
-      cep: "",
-      rua: "",
-      numero: "",
-      complemento: "",
-      bairro: "",
-      cidade: "",
-      uf: "",
-
+      nome: '',
+      cpf: '',
+      username: '',
+      senha: '',
+      telefone: '',
+      email: '',
+      cep: '',
+      rua: '',
+      numero: '',
+      complemento: '',
+      bairro: '',
+      cidade: '',
+      uf: ''
     },
-    
-    
-    
 
     nomeRules: [
-      v => !!v || "Nome é obrigatório",
-      v =>
+      (v) => !!v || 'Nome é obrigatório',
+      (v) =>
         (v.length >= 10 && v.length <= 30) ||
-        "Nome precisa ter entre 10 e 30 caracteres"
+        'Nome precisa ter entre 10 e 30 caracteres'
     ],
     cpfRules: [
-      v => !!v || "CPF é obrigatório",
-      v =>
-        (v.length ==11) ||
-        "Digite somente os números do CPF"
+      (v) => !!v || 'CPF é obrigatório',
+      (v) => v.length == 11 || 'Digite somente os números do CPF'
     ],
     usernameRules: [
-      v => !!v || "Username é obrigatório",
-      v =>
+      (v) => !!v || 'Username é obrigatório',
+      (v) =>
         (v.length >= 3 && v.length <= 15) ||
-        "Username precisa ter entre 3 e 15 caracteres"
+        'Username precisa ter entre 3 e 15 caracteres'
     ],
     senhaRules: [
-      v => !!v || "Senha é obrigatório",
-      v =>
+      (v) => !!v || 'Senha é obrigatório',
+      (v) =>
         (v.length >= 8 && v.length <= 12) ||
-        "Senha precisa ter entre 8 e 12 caracteres"
+        'Senha precisa ter entre 8 e 12 caracteres'
     ],
     telefoneRules: [
-      v => !!v || "Celular é obrigatório",
-      v =>
-        (v.length == 11) ||
-        "(67)xxxxxxxxx"
+      (v) => !!v || 'Celular é obrigatório',
+      (v) => v.length == 11 || '(67)xxxxxxxxx'
     ],
     emailRules: [
-      v => !!v || "E-mail é obrigatório",
-      v =>
+      (v) => !!v || 'E-mail é obrigatório',
+      (v) =>
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-        "email@email.com"
+        'email@email.com'
     ],
     cepRules: [
-      v => !!v || "CEP é obrigatório",
-      v =>
-        (v.length == 9) ||
-        "00000-000"
+      (v) => !!v || 'CEP é obrigatório',
+      (v) => v.length == 9 || '00000-000'
     ],
     numeroRules: [
-      v => !!v || "Número é obrigatório",
-      v =>
+      (v) => !!v || 'Número é obrigatório',
+      (v) =>
         (v.length >= 1 && v.length <= 5) ||
-        "Número precisa ter entre 1 e 5 caracteres"
+        'Número precisa ter entre 1 e 5 caracteres'
     ],
     ruaRules: [
-      v => !!v || "Rua é obrigatório",
-      v =>
-        (v.length >= 5) ||
-        "Digite sua rua, avenida, travessa, etc"
+      (v) => !!v || 'Rua é obrigatório',
+      (v) => v.length >= 5 || 'Digite sua rua, avenida, travessa, etc'
     ],
     bairroRules: [
-      v => !!v || "bairro é obrigatório",
-      v =>
-        (v.length >= 3) ||
-        "Vila, Jardim, etc"
+      (v) => !!v || 'bairro é obrigatório',
+      (v) => v.length >= 3 || 'Vila, Jardim, etc'
     ],
     cidadeRules: [
-      v => !!v || "Cidade é obrigatório",
-      v =>
-        (v.length >= 1 && v.length <= 12) ||
-        "Cidade, Distrito, etc"
+      (v) => !!v || 'Cidade é obrigatório',
+      (v) => (v.length >= 1 && v.length <= 12) || 'Cidade, Distrito, etc'
     ],
     ufRules: [
-      v => !!v || "Estado é obrigatório",
-      v =>
-        (v.length ==2) ||
-        "SIGLA ex: MS "
-    ],
-
-   
+      (v) => !!v || 'Estado é obrigatório',
+      (v) => v.length == 2 || 'SIGLA ex: MS '
+    ]
   }),
 
   methods: {
+    async salvar() {
+      if (this.cadastroCorrente.senha != this.confirmarSenha) {
+        alert('Senhas não conferem!');
+      }
+      this.isDialogSalvoComSucesso = true;
+      this.msgSalvoComSucesso = 'Cliente criado com sucesso';
 
-     async salvar(){
-       if (this.cadastroCorrente.senha != this.confirmarSenha) {
-         alert("Senhas não conferem!");
-       }
+      setTimeout(() => {
+        this.isDialogSalvoComSucesso = false;
+        this.msgSalvoComSucesso = '';
+      }, 1500);
+    },
 
-       
+    adicionar() {},
 
-         this.isDialogSalvoComSucesso = true;
-         this.msgSalvoComSucesso = "Cliente criado com sucesso";
-
-         setTimeout(() => {
-           this.isDialogSalvoComSucesso = false;
-           this.msgSalvoComSucesso = "";
-         }, 1500);
-       }
-     },
-     adicionar() {
-       
-       
-       
-     },
-     
-     fechaCadastroUsuario(){
-       this.$router.push({
+    fechaCadastroUsuario() {
+      this.$router.push({
         path: `/`
       });
-
-     },
-    
-
-  
-  },
+    }
+  }
 };
 </script>
 
