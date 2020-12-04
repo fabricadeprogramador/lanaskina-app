@@ -1,17 +1,18 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Login from '../views/Login.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Login from '../views/Login.vue';
+import AutenticacaoService from '@/services/AutenticacaoService';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login
   },
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: () => import('../views/Home.vue')
   },
@@ -45,11 +46,18 @@ const routes = [
     name: 'Cadastro',
 
     component: () => import('../views/Cadastro.vue')
-  },
-]
+  }
+];
 
 const router = new VueRouter({
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  const usuarioLogado = AutenticacaoService.getUsuarioLogado();
+
+  if (to.name !== 'Login' && !usuarioLogado) next({ name: 'Login' });
+  else next();
+});
+
+export default router;

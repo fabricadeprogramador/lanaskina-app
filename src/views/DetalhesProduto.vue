@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Navegacao></Navegacao>
     <v-card class="pa-3">
       <!-- //Inicio mensagem de sucesso -->
       <v-dialog v-model="dialogMsg" max-width="400">
@@ -24,7 +25,9 @@
             <v-row
               ><strong>{{ msg }}</strong></v-row
             >
-            <small>É possivel adicionar produtos ao carrinho da mesma loja!</small>
+            <small
+              >É possivel adicionar produtos ao carrinho da mesma loja!</small
+            >
             <div class="mt-5 text-center">
               <v-row justify="center">
                 <v-alert color="black">Deseja Ir para o carrinho?</v-alert>
@@ -95,21 +98,23 @@
 </template>
 
 <script>
-import EmpresaHttp from "@/HttpServices/EmpresaHttp";
-import ClienteHttp from "@/HttpServices/ClienteHttp";
+import EmpresaHttp from '@/HttpServices/EmpresaHttp';
+import ClienteHttp from '@/HttpServices/ClienteHttp';
+import Navegacao from '@/components/Navegacao';
 
 export default {
-  name: "Detalhes-Empresa",
+  name: 'Detalhes-Empresa',
+  components: { Navegacao },
   data() {
     return {
       produto: {
         valor: 0
       },
       qtd: 0,
-      empresa: "",
-      cliente: "5f98be432e9ed602a0dfdb4c",
+      empresa: '',
+      cliente: '5f98be432e9ed602a0dfdb4c',
       dialogMsg: false,
-      msg: "",
+      msg: '',
       iconeFechaAlertEmpresaDiferente: true,
       empresaEdiferente: false
     };
@@ -123,7 +128,7 @@ export default {
 
       let resposta = await EmpresaHttp.buscarPorId(this.empresa);
       if (resposta && resposta.status == 200) {
-        resposta.data.produtos.forEach(produto => {
+        resposta.data.produtos.forEach((produto) => {
           if (produto._id == this.$route.params.produto_id)
             this.produto = produto;
         });
@@ -146,10 +151,10 @@ export default {
         console.log(resposta);
         if (resposta && resposta.status == 200) {
           this.dialogMsg = true;
-          this.msg = "Produto adicionado ao carrinho";
+          this.msg = 'Produto adicionado ao carrinho';
 
           setTimeout(() => {
-            (this.dialogMsg = false), (this.msg = "");
+            (this.dialogMsg = false), (this.msg = '');
 
             this.$router.push({
               path: `/carrinho/${this.cliente}`
@@ -158,7 +163,7 @@ export default {
         } else if (resposta.status == 202) {
           this.empresaEdiferente = true;
           this.msg =
-            "Não é possivel fazer compras em outra loja antes de finalizar o carrinho!";
+            'Não é possivel fazer compras em outra loja antes de finalizar o carrinho!';
 
           // setTimeout(() => {
           //   this.empresaEdiferente = false;
@@ -167,7 +172,7 @@ export default {
           // }, 3500);
         }
       } else {
-        alert("Informe a quantidade!");
+        alert('Informe a quantidade!');
       }
     },
     irParaCarrinho() {

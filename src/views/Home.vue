@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Navegacao></Navegacao>
     <v-container fluid>
       <v-row dense>
         <v-col v-for="empresa in empresas" :key="empresa._id" cols="12">
@@ -47,42 +48,46 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
+import EmpresaHttp from '@/HttpServices/EmpresaHttp';
+import Navegacao from '@/components/Navegacao';
 // @ is an alias to /src
 
 export default {
   name: 'Home',
+  components: {
+    Navegacao
+  },
   data() {
     return {
       noImagePath:
         'https://www.cetegeducacao.com.br/wp-content/themes/cetegeducacao/assets/dist/img/no-image.png',
       empresas: []
-    }
+    };
   },
 
   mounted() {
-    this.buscarEmpresas()
+    this.buscarEmpresas();
   },
 
   computed: {},
 
   methods: {
     async buscarEmpresas() {
-      let resposta = await EmpresaHttp.buscarTodos()
+      let resposta = await EmpresaHttp.buscarTodos();
       if (resposta && resposta.status == 200) {
-        this.empresas = resposta.data
+        this.empresas = resposta.data;
       }
     },
 
     abrirDetalhesDaEmpresa(empresa) {
       this.$router.push({
         path: `/detalhes-empresa/${empresa._id}`
-      })
+      });
     },
 
     getImagePath(image) {
-      return image ? image : this.noImagePath
+      return image ? image : this.noImagePath;
     }
   }
-}
+};
 </script>

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Navegacao></Navegacao>
     <div class="d-flex flex-column justify-space-between align-center my-3">
       <v-img width="300" :src="empresa.imagem"></v-img>
     </div>
@@ -49,39 +50,41 @@
 </template>
 
 <script>
-import EmpresaHttp from '@/HttpServices/EmpresaHttp'
+import EmpresaHttp from '@/HttpServices/EmpresaHttp';
+import Navegacao from '@/components/Navegacao';
 
 export default {
   name: 'Detalhes-Empresa',
+  components: { Navegacao },
   data() {
     return {
       empresa: {
-        endereco:{
-          rua:'',
-          bairro:'',
-          numero:''
+        endereco: {
+          rua: '',
+          bairro: '',
+          numero: ''
         }
       }
-    }
+    };
   },
   created() {
-    this.getEmpresa()
+    this.getEmpresa();
   },
   methods: {
     async getEmpresa() {
-      let empresaId = this.$route.params.empresa_id
+      let empresaId = this.$route.params.empresa_id;
 
-      let resposta = await EmpresaHttp.buscarPorId(empresaId)
+      let resposta = await EmpresaHttp.buscarPorId(empresaId);
       if (resposta && resposta.status == 200) {
-        this.empresa = resposta.data
+        this.empresa = resposta.data;
       }
     },
 
     irParaDetalhesProduto(produto) {
       this.$router.push({
         path: `/detalhes-produto/${this.empresa._id}/${produto._id}`
-      })
+      });
     }
   }
-}
+};
 </script>

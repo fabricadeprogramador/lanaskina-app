@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Navegacao></Navegacao>
     <v-card>
       <v-card-title>Falta Pouco!!!!</v-card-title>
       <v-card>
@@ -44,8 +45,8 @@
         <!-- //Inicio mensagem de sucesso -->
         <v-dialog v-model="dialogMsg" max-width="400">
           <v-expand-transition>
-            <v-alert  type="success" class="text-center">
-               <strong> {{msg}}</strong>               
+            <v-alert type="success" class="text-center">
+              <strong> {{ msg }}</strong>
             </v-alert>
           </v-expand-transition>
         </v-dialog>
@@ -75,23 +76,25 @@
 </template>
 
 <script>
-import ClienteHttp from "@/HttpServices/ClienteHttp";
-import EmpresaHttp from "@/HttpServices/EmpresaHttp";
+import ClienteHttp from '@/HttpServices/ClienteHttp';
+import EmpresaHttp from '@/HttpServices/EmpresaHttp';
+import Navegacao from '@/components/Navegacao';
 
 export default {
-  name: "Finalizar",
+  name: 'Finalizar',
+  components: { Navegacao },
   data() {
     return {
-      formasPgt: ["Cartão de Crédito", "Cartão de Débito", "Boleto"],
-      pgtSelecionado: "",
-      parcelasSelecionada: "",
+      formasPgt: ['Cartão de Crédito', 'Cartão de Débito', 'Boleto'],
+      pgtSelecionado: '',
+      parcelasSelecionada: '',
       parcelas: [],
       total: 0,
-      cliente: "",
-      empresa: "",
+      cliente: '',
+      empresa: '',
       carrinho: [],
-      dialogMsg:false,
-      msg:''
+      dialogMsg: false,
+      msg: ''
     };
   },
   created() {
@@ -109,7 +112,7 @@ export default {
     },
     calculaTotal() {
       let total = 0;
-      this.carrinho.forEach(produto => {
+      this.carrinho.forEach((produto) => {
         total += produto.valor * produto.quantidade;
       });
       this.total = total;
@@ -128,36 +131,34 @@ export default {
       console.log(this.parcelas);
     },
     async pagar() {
-      if (this.parcelasSelecionada == "") return alert("Selecione a parcela");
+      if (this.parcelasSelecionada == '') return alert('Selecione a parcela');
 
       let transacao = { produtos: [] };
       transacao.valorTotal = this.total;
-      this.carrinho.forEach(produto => {
+      this.carrinho.forEach((produto) => {
         let produtoEnvio = {};
         produtoEnvio.nome = produto.nome;
         produtoEnvio.valor = produto.valor;
         produtoEnvio.quantidade = produto.quantidade;
         transacao.produtos.push(produtoEnvio);
       });
-      transacao.status = "Concluido";
+      transacao.status = 'Concluido';
       transacao.dataTransacoes;
       transacao.cliente = this.cliente;
 
       let idEmpresa = this.carrinho[0].empresa;
       let resposta = await EmpresaHttp.criaTransacoes(idEmpresa, transacao);
       if (resposta.status == 200) {
-        this.dialogMsg = true,
-        this.msg = "Sua compra foi finalizada com sucesso !!!!"
+        (this.dialogMsg = true),
+          (this.msg = 'Sua compra foi finalizada com sucesso !!!!');
 
         setTimeout(() => {
-        this.dialogMsg = false,
-        this.msg = ""
+          (this.dialogMsg = false), (this.msg = '');
 
           this.$router.push({
-          path: `/historico/${this.cliente}`
-        });
+            path: `/historico/${this.cliente}`
+          });
         }, 2500);
-        
       }
     }
   }

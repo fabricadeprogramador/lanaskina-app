@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Navegacao></Navegacao>
     <v-card class="mb-3">
       <!-- //Inicio mensagem de sucesso -->
       <v-dialog v-model="dialogMsg" max-width="400">
@@ -11,16 +12,18 @@
       </v-dialog>
       <!-- Final de mensagem de sucesso -->
 
-      <v-dialog v-model="confirmExclusao" max-width="400" persistent >
-        <v-card  >
+      <v-dialog v-model="confirmExclusao" max-width="400" persistent>
+        <v-card>
           <h3 class="text-center pa-5">Deseja Realmente excluir produto ?</h3>
           <v-row no-gutters class="pa-3 text-center">
-           <v-col>
-             <v-btn color="success" @click="excluiDoCarrinho()">SIM</v-btn>
-           </v-col>
-           <v-col>
-             <v-btn color="info"  @click="fechaTelaConfirmarExclusao()">NÂO</v-btn>
-           </v-col>
+            <v-col>
+              <v-btn color="success" @click="excluiDoCarrinho()">SIM</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn color="info" @click="fechaTelaConfirmarExclusao()"
+                >NÂO</v-btn
+              >
+            </v-col>
           </v-row>
         </v-card>
       </v-dialog>
@@ -40,7 +43,10 @@
           R$ {{ item.valor.toFixed(2) }}
         </template>
         <template v-slot:item.acao="{ item }">
-          <v-icon @click="abreTelaConfirmarExclusao(item)" title="Exclui Produto">
+          <v-icon
+            @click="abreTelaConfirmarExclusao(item)"
+            title="Exclui Produto"
+          >
             mdi mdi-minus-circle-outline
           </v-icon>
         </template>
@@ -69,30 +75,34 @@
 </template>
 
 <script>
-import ClienteHttp from "@/HttpServices/ClienteHttp";
+import ClienteHttp from '@/HttpServices/ClienteHttp';
+import Navegacao from '@/components/Navegacao';
 
 export default {
-  name: "Carrinho",
+  name: 'Carrinho',
+  components: {
+    Navegacao
+  },
   data() {
     return {
       produto: {},
       cabecalhoCarrinho: [
-        { text: "", value: "imagem" },
-        { text: "Nome", value: "nome" },
-        { text: "Valor Unitário", value: "valor" },
-        { text: "Quantidade", value: "quantidade" },
-        { text: "Ação", value: "acao" }
+        { text: '', value: 'imagem' },
+        { text: 'Nome', value: 'nome' },
+        { text: 'Valor Unitário', value: 'valor' },
+        { text: 'Quantidade', value: 'quantidade' },
+        { text: 'Ação', value: 'acao' }
       ],
       carrinho: [],
-      itemExcluir:{},
+      itemExcluir: {},
       total: 0,
-      cliente: "5f98be432e9ed602a0dfdb4c",
+      cliente: '5f98be432e9ed602a0dfdb4c',
       noImagePath:
-        "https://www.cetegeducacao.com.br/wp-content/themes/cetegeducacao/assets/dist/img/no-image.png",
-      msg: "",
+        'https://www.cetegeducacao.com.br/wp-content/themes/cetegeducacao/assets/dist/img/no-image.png',
+      msg: '',
       dialogMsg: false,
       confirmExclusao: false,
-      RespostaconfirmExclusao:null
+      RespostaconfirmExclusao: null
     };
   },
   created() {
@@ -109,46 +119,43 @@ export default {
     },
     calculaTotal() {
       let total = 0;
-      this.carrinho.forEach(produto => {
+      this.carrinho.forEach((produto) => {
         total += produto.valor * produto.quantidade;
       });
       this.total = total;
     },
-    async abreTelaConfirmarExclusao(item){
-      this.confirmExclusao =  true     
+    async abreTelaConfirmarExclusao(item) {
+      this.confirmExclusao = true;
       this.itemExcluir = JSON.parse(JSON.stringify(item));
-      
     },
-     async fechaTelaConfirmarExclusao(){
-      this.confirmExclusao =  false
+    async fechaTelaConfirmarExclusao() {
+      this.confirmExclusao = false;
       this.itemExcluir = {};
     },
     async excluiDoCarrinho() {
-        this.confirmExclusao =  false
-        //transferindo dados para nao carregar na pagina antes do retorno do back-end
-        let carrinhoAtualizado = JSON.parse(JSON.stringify(this.carrinho));
-        carrinhoAtualizado.forEach((produto, index) => {         
-          if (produto._id == this.itemExcluir._id) {
-            carrinhoAtualizado.splice(index, 1);
-          }
-        });
-
-        let resposta = await ClienteHttp.excluirProdutoCarrinho(
-          this.cliente,
-          carrinhoAtualizado
-        );
-        if (resposta.status == 200) {
-          this.dialogMsg = true;
-          this.msg = "Produto excluido do carrinho";
-          this.carrinho = resposta.data;
-          this.calculaTotal();
-          
-          setTimeout(() => {
-            (this.dialogMsg = false), (this.msg = "");
-          }, 1500);
+      this.confirmExclusao = false;
+      //transferindo dados para nao carregar na pagina antes do retorno do back-end
+      let carrinhoAtualizado = JSON.parse(JSON.stringify(this.carrinho));
+      carrinhoAtualizado.forEach((produto, index) => {
+        if (produto._id == this.itemExcluir._id) {
+          carrinhoAtualizado.splice(index, 1);
         }
-      
-      
+      });
+
+      let resposta = await ClienteHttp.excluirProdutoCarrinho(
+        this.cliente,
+        carrinhoAtualizado
+      );
+      if (resposta.status == 200) {
+        this.dialogMsg = true;
+        this.msg = 'Produto excluido do carrinho';
+        this.carrinho = resposta.data;
+        this.calculaTotal();
+
+        setTimeout(() => {
+          (this.dialogMsg = false), (this.msg = '');
+        }, 1500);
+      }
     },
     finalizarCompra() {
       // console.log(this.carrinho, this.cliente)
